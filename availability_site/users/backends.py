@@ -45,7 +45,7 @@ class CustomRavenAuthBackend(RemoteUserBackend):
 
         # creates (if necessary) the UserProfile model and update the raven_for_life property from the RavenResponse
         if user:
-            profile = MyUser.objects.get_or_create(email=user)[0]
+            profile = MyUser.objects.get_or_create(email=user.email)[0]
             profile.crsid = str(response.principal)
             profile.save()
 

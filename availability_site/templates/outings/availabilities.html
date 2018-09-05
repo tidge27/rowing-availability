@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% block center %}
+<div style="overflow:auto">
+<form method="post">{% csrf_token %}
+
+    <div class="weekWrapper" style="white-space: nowrap; sc">
+    {% for formset in formsets %}
+        <div class="dayWrapper" style="display:inline-block; vertical-align:top;">
+        <h1>{{ formset.date.day }}/{{ formset.date.month }}</h1>
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div class="timeslotWrapper">
+            {% for field in form %}
+                    {{ field.errors }}
+                    <!--{{ field.label_tag }} -->
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+            {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    {% endfor %}
+    </div>
+    <input type="submit" value="Submit">
+</form>
+</div>
+{% endblock %}

@@ -5,5 +5,5 @@ from ucamwebauth.views import raven_login, raven_logout, raven_return
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('availabilities', views.availabilities, name='availabilities'),
 ]

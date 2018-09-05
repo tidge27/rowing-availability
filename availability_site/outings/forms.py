@@ -17,14 +17,16 @@ class EventForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.date = kwargs.pop('date')
         super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['start_time'].initial = self.date
+        self.fields['end_time'].initial = self.date
 
     class Meta:
         model = Event
         fields = ['start_time','end_time']
 
 
-    start_time = forms.SplitDateTimeField(widget=SplitHalfHiddenDateTimeWidget())
-    end_time = forms.SplitDateTimeField(widget=SplitHalfHiddenDateTimeWidget())
+    start_time = forms.SplitDateTimeField(widget=SplitHalfHiddenDateTimeWidget(time_attrs={"type":"time"}))
+    end_time = forms.SplitDateTimeField(widget=SplitHalfHiddenDateTimeWidget(time_attrs={"type":"time"}))
 
 
 

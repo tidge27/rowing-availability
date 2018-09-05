@@ -1,8 +1,4 @@
-from django.http import HttpResponse
-from django.template import loader, Context
-
-def index(request):
-    template = loader.get_template('index.html')
+def base_context(request):
     my_context = {
         "user": request.user if request.user.is_authenticated else {'email': "Logged Out"},
         "login_logout_text": "Logout" if request.user.is_authenticated else "Login with Raven",
@@ -11,7 +7,7 @@ def index(request):
             {
                 "name": "Home",
                 "icon": "home",
-                "link": "#",
+                "link": "/",
             },
             {
                 "name": "Availabilities",
@@ -21,4 +17,4 @@ def index(request):
         ],
         "support_email":"mailto:tidge27@gmail.com"
     }
-    return HttpResponse(template.render(my_context, request))
+    return my_context

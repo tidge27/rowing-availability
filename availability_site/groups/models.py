@@ -8,6 +8,10 @@ class Group(models.Model):
     name = models.CharField(max_length=140)
     is_boat = models.BooleanField(default=False)
 
+    @property
+    def get_member_count(self):
+        return len(GroupMember.objects.filter(group=self))
+
     def __str__(self):
         return '<Group {}>'.format(self.name)
 

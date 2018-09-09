@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+<div class="mdl-grid demo-content">
+    <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+            <h2 class="mdl-card__title-text" style="display: block;">
+                <span style="display: inline-block;white-space:nowrap">Availabilities for {{ group }},&nbsp;</span>
+                <span style="display: inline-block;white-space:nowrap"> {{ availability_day|date:"D d M Y" }}</span>
+            </h2>
+        </div>
+        <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-card--expand">
+            <a href="{{ prev_day_link }}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Previous
+                </button>
+            </a>
+            <a href="{{ request.GET.urlencode }}{{ next_day_link }}">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                        style="margin-left:10px;">Next
+                </button>
+            </a>
+        </div>
+
+    </div>
+
+
+    <style>
+.demo-card-event.mdl-card {
+  width: 256px;
+  height: 256px;
+  background: #3E4EB8;
+  min-height:110px
+}
+.demo-card-event > .mdl-card__actions {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.demo-card-event > .mdl-card__title {
+  align-items: flex-start;
+}
+.demo-card-event > .mdl-card__title > h4 {
+  margin: 0;
+}
+.demo-card-event > .mdl-card__actions {
+  display: flex;
+  box-sizing:border-box;
+  align-items: center;
+}
+.demo-card-event > .mdl-card__actions > .material-icons {
+  padding-right: 10px;
+}
+.demo-card-event > .mdl-card__title,
+.demo-card-event > .mdl-card__actions,
+.demo-card-event > .mdl-card__actions > .mdl-button {
+  color: #fff;
+}
+
+.demo-card-event.mdl-card.mdl-shadow--2dp:hover {
+    z-index: 4;
+    box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2);
+}
+
+    </style>
+
+
+    <!--<form method="post" class="mdl-cell mdl-cell&#45;&#45;12-col mdl-grid" style="padding: 0px; width: 100%; margin: 0px;">{% csrf_token %}-->
+    <!---->
+    <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"
+         style="display: flex; align-items: center; justify-content: center; padding:10px;">
+        <!--<input type="submit" value="Submit">-->
+        <div style=" width:100%;">
+            {% for time_block in time_block_list %}
+
+
+            <div class="demo-card-event mdl-card mdl-shadow--2dp"
+                 style="height:calc({{ time_block.length_percent }}*10px - 8px); width:100%; background: {{ time_block.html_color }}; margin-bottom: 8px; ">
+                <div class="mdl-card__title mdl-card--expand">
+
+                    <h4>
+                        <a href="#">
+                        <div style="color:#fff; font-weight:normal">
+                            {{ time_block.start_time|time:"H:i" }} - {{ time_block.end_time|time:"H:i" }}
+                        </div>
+                        </a>
+                    </h4>
+
+                </div>
+                <!--<div class="mdl-card__actions mdl-card&#45;&#45;border">-->
+                <!--<a class="mdl-button mdl-button&#45;&#45;colored mdl-js-button mdl-js-ripple-effect">-->
+                <!--Add to Calendar-->
+                <!--</a>-->
+                <!--<div class="mdl-layout-spacer"></div>-->
+                <!--<i class="material-icons">event</i>-->
+                <!--</div>-->
+                <!---->
+
+
+                <div class="mdl-card__actions mdl-card--border" style="overflow:auto;">
+                    <div style="display:flex;">
+                        {% for user in time_block.users %}
+                        <button class="mdl-chip mdl-chip--contact" style="margin-right:8px;">
+                            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ user.crsid.0 }}</span>
+                            <span class="mdl-chip__text">{{ user.crsid }}</span>
+
+
+                            <div style="position:absolute; width:8px; height:1px; left:100%"></div>
+
+
+                        </button>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+    <!--</div>-->
+    <!--<button type="submit" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-button&#45;&#45;accent">-->
+    <!--Submit-->
+    <!--</button>-->
+    <!--</div>-->
+    <!--</form>-->
+</div>
+
+
+{% endblock %}

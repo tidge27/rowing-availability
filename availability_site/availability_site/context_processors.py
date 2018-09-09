@@ -13,7 +13,19 @@ def base_context(request):
                 "name": "Availabilities",
                 "icon": "calendar_today",
                 "link": "/outings/availabilities"
+            },
+            {
+                "name": "Outings",
+                "icon": "access_time",
+                "link": "/outings/outings"
             }
+        ],
+        "admin_pages": [
+            {
+                "name": "Groups",
+                "icon": "group",
+                "link": "/groups/groups",
+            },
         ],
         "support_email":"mailto:tidge27@gmail.com"
     }

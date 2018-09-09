@@ -78,4 +78,8 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+    def is_busy(self, time):
+        length = self.events.filter(start_time__lte=time, end_time__gt=time).count()
+        return length != 0
+
 

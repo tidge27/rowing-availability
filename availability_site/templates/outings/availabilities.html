@@ -2,13 +2,20 @@
 
 {% block center %}
 
-<div style="overflow:auto;">
-    <a href="{{ prev_monday_link }}">Previous Week</a>
-    <a href="{{ next_monday_link }}">Next Week</a>
-    <form method="post">{% csrf_token %}
-        <div class="weekWrapper" style="white-space: nowrap;">
+<div class="mdl-grid demo-content">
+    <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+              <div class="mdl-card__title mdl-card--expand mdl-color--teal-300">
+                <h2 class="mdl-card__title-text">Availabilities for {{ user.email }}</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-card--expand">
+                  <a href="{{ prev_monday_link }}"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Previous Week</button></a>
+                  <a href="{{ next_monday_link }}"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="margin-left:10px;">Next Week</button></a>
+        </div>
+
+            </div>
+    <form method="post" class="mdl-cell mdl-cell--12-col mdl-grid" style="padding: 0px; width: 100%; margin: 0px;">{% csrf_token %}
         {% for formset in formsets %}
-            <div class="dayWrapper" style="display:inline-block; vertical-align:top;">
+            <div class="demo-updates mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" style="display:inline-block; vertical-align:top;">
             <h1>{{ formset.date.day }}/{{ formset.date.month }}</h1>
             {{ formset.management_form }}
             {% for form in formset %}
@@ -25,8 +32,13 @@
             {% endfor %}
             </div>
         {% endfor %}
-        </div>
-        <input type="submit" value="Submit">
+        <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" style="display: flex; align-items: center; justify-content: center; padding:10px;">
+        <!--<input type="submit" value="Submit">-->
+            <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+  Submit
+</button>
+            </div>
     </form>
 </div>
+
 {% endblock %}

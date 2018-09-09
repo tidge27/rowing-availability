@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+<div class="mdl-grid demo-content">
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+            <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric">Group Name</th>
+                    <th>Members</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for group in group_list %}
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        {{ group.name }}
+                    </td>
+                    <td>{{ group.get_member_count }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+  Add New
+</button>
+    </form>
+</div>
+
+{% endblock %}

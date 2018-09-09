@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+<div class="mdl-grid demo-content" style="max-width:500px;">
+    <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+        <style>
+.demo-list-three {
+  width: 100%;
+}
+</style>
+        <span class="mdl-layout-title">My Outings</span>
+    <ul class="demo-list-three mdl-list">
+        {% for i in "xxx" %}
+        {% for outing in outing_list %}
+            <a href="{{ outing.outing.get_absolute_url }}" style="text-decoration:none">
+                <li class="mdl-list__item mdl-list__item--three-line">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-avatar">{{ outing.outing.get_icon }}</i>
+                        <span>{{ outing.outing.group.name }}</span>
+                        <span class="mdl-list__item-secondary-info">
+
+                        </span>
+                        <span class="mdl-list__item-text-body">
+                            <b>Start:</b> {{ outing.outing.start_time }}
+                            <br>
+                            <b>Seat:</b> {{ outing.seat }}
+                        </span>
+                    </span>
+                    <!--<span class="mdl-list__item-secondary-content">-->
+                    <!--<a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>-->
+                    <!--</span>-->
+                </li>
+            </a>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>
+</div>
+{% endblock %}

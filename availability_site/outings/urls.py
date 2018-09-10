@@ -9,4 +9,5 @@ urlpatterns = [
     path('outings', views.UserOutingMemberListView.as_view(), name='outings'),
     path('outing/<uuid:pk>', views.UserOutingDetailView.as_view(), name='outing-detail'),
     path('group-availabilities', views.CombinedAvailabilityView.as_view(), name='group-availabilities'),
+    path('create', views.create_outing, name='create'),
 ]

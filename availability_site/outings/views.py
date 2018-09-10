@@ -1,4 +1,4 @@
-from outings.forms import BookFormSet
+from outings.forms import EventFormSet
 from outings.models import Event, Outing, OutingMember
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
@@ -10,6 +10,8 @@ from django.views import View
 from django.views.generic.base import TemplateView
 import json
 from groups.models import GroupMember, Group
+from outings.forms import OutingModelForm, OutingMemberFormSet
+from django.urls import reverse
 
 def availabilities(request):
     user = request.user
@@ -31,9 +33,9 @@ def availabilities(request):
         for i in range(0,7):
             start_of_day = week_commencing + datetime.timedelta(days=i)
             end_of_day = week_commencing + datetime.timedelta(days=i+1)
-            formsets.append(BookFormSet(request.POST, request.FILES, prefix="set_{}".format(i), instance=user,
-                              queryset=Event.objects.filter(start_time__gte=start_of_day, start_time__lte=end_of_day),
-                              date=week_commencing+ datetime.timedelta(days=i)))
+            formsets.append(EventFormSet(request.POST, request.FILES, prefix="set_{}".format(i), instance=user,
+                                         queryset=Event.objects.filter(start_time__gte=start_of_day, start_time__lte=end_of_day),
+                                         date=week_commencing+ datetime.timedelta(days=i)))
         all_valid = True
         for formset in formsets:
             if formset.is_valid():
@@ -47,10 +49,10 @@ def availabilities(request):
             for i in range(0, 7):
                 start_of_day = week_commencing + datetime.timedelta(days=i)
                 end_of_day = week_commencing + datetime.timedelta(days=i + 1)
-                formsets.append(BookFormSet(prefix="set_{}".format(i), instance=user,
-                                            queryset=Event.objects.filter(start_time__gte=start_of_day,
+                formsets.append(EventFormSet(prefix="set_{}".format(i), instance=user,
+                                             queryset=Event.objects.filter(start_time__gte=start_of_day,
                                                                           start_time__lte=end_of_day),
-                                            date=week_commencing + datetime.timedelta(days=i)))
+                                             date=week_commencing + datetime.timedelta(days=i)))
             # Do something. Should generally end with a redirect. For example:
             # return HttpResponseRedirect('')
     else:
@@ -58,10 +60,10 @@ def availabilities(request):
         for i in range(0, 7):
             start_of_day = week_commencing + datetime.timedelta(days=i)
             end_of_day = week_commencing + datetime.timedelta(days=i+1)
-            formsets.append(BookFormSet(prefix="set_{}".format(i), instance=user,
-                                        queryset=Event.objects.filter(start_time__gte=start_of_day,
+            formsets.append(EventFormSet(prefix="set_{}".format(i), instance=user,
+                                         queryset=Event.objects.filter(start_time__gte=start_of_day,
                                                                       start_time__lte=end_of_day),
-                                        date=week_commencing+ datetime.timedelta(days=i)))
+                                         date=week_commencing+ datetime.timedelta(days=i)))
 
     template = loader.get_template('outings/availabilities.html')
     context = {'formsets': formsets,
@@ -217,3 +219,56 @@ class CombinedAvailabilityView(TemplateView):
                    'prev_day_link': prev_day_link,
                    'next_day_link': next_day_link}
         return HttpResponse(template.render(context, request))
+
+
+def create_outing(request):
+    if request.GET.get("id", None):
+        outing = Outing.objects.get(id=request.GET.get("id", None))
+    else:
+        outing = Outing()
+
+    if request.method == "POST":
+        outing = OutingModelForm(request.POST, instance=outing)
+        if outing.is_valid():
+            created_outing = outing.save()
+            formset = OutingMemberFormSet(request.POST, instance=created_outing)
+            print(formset)
+            if formset.is_valid():
+                formset.save()
+                print(formset.cleaned_data)
+                return HttpResponseRedirect(reverse('outings'))
+
+
+            else:
+                print("formset invalid")
+                print(formset.errors)
+                context = {
+                    'outing_form': outing,
+                    'formset': formset,
+                }
+        else:
+            print("form invalic")
+            formset = OutingMemberFormSet(instance=Outing())
+            context = {
+                'outing_form': outing,
+                'formset': formset,
+            }
+
+
+    else:
+
+        if request.GET.get("id", None):
+            outing = Outing.objects.get(id=request.GET.get("id", None))
+            outing_form = OutingModelForm(instance=outing)
+        else:
+            outing = Outing()
+            outing_form = OutingModelForm()
+
+        formset = OutingMemberFormSet(instance=outing)
+
+        context = {
+            'outing_form': outing_form,
+            'formset': formset,
+        }
+    template = loader.get_template('outings/create_update.html')
+    return HttpResponse(template.render(context, request))

@@ -9,12 +9,14 @@ class GroupMemberForm(ModelForm):
 
     class Meta:
         model = GroupMember
-        fields = ['seat']
+        fields = ['seat', 'user']
 
-BaseGroupMemberFormSet = inlineformset_factory(Group, GroupMember, form=GroupMemberForm)
+BaseGroupMemberFormSet = inlineformset_factory(Group, GroupMember, form=GroupMemberForm, extra=10, max_num=9)
 
 class GroupMemberFormSet(BaseGroupMemberFormSet):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(GroupMemberFormSet, self).__init__(*args, **kwargs)
+        self.queryset = self.queryset.order_by('-seat')
 
 
 class GroupModelForm(ModelForm):

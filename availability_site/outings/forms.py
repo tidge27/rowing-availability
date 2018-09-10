@@ -1,6 +1,6 @@
 from django.forms import inlineformset_factory, ModelForm
 from django import forms
-from outings.models import Event
+from outings.models import Event, Outing, OutingMember
 from users.models import MyUser
 from datetime import datetime
 
@@ -29,16 +29,12 @@ class EventForm(ModelForm):
     end_time = forms.SplitDateTimeField(widget=SplitHalfHiddenDateTimeWidget(time_attrs={"type":"time"}))
 
 
+BaseEventFormSet = inlineformset_factory(MyUser, Event, form=EventForm)
 
-
-
-
-BaseBookFormSet = inlineformset_factory(MyUser, Event, form=EventForm)
-
-class BookFormSet(BaseBookFormSet):
+class EventFormSet(BaseEventFormSet):
     def __init__(self, *args, **kwargs):
         self.date = kwargs.pop('date')
-        super(BookFormSet, self).__init__(*args, **kwargs)
+        super(EventFormSet, self).__init__(*args, **kwargs)
     def clean(self):
         super().clean()
 
@@ -50,4 +46,25 @@ class BookFormSet(BaseBookFormSet):
             # form.instance.name = name
     def _construct_form(self, *args, **kwargs):
         kwargs['date'] = self.date
-        return super(BookFormSet, self)._construct_form(*args, **kwargs)
+        return super(EventFormSet, self)._construct_form(*args, **kwargs)
+
+
+class OutingMemberForm(ModelForm):
+
+    class Meta:
+        model = OutingMember
+        fields = ['seat', 'user']
+
+BaseGroupMemberFormSet = inlineformset_factory(Outing, OutingMember, form=OutingMemberForm, extra=10, max_num=9)
+
+class OutingMemberFormSet(BaseGroupMemberFormSet):
+    def __init__(self, *args, **kwargs):
+        super(OutingMemberFormSet, self).__init__(*args, **kwargs)
+        self.queryset = self.queryset.order_by('-seat')
+
+
+class OutingModelForm(ModelForm):
+
+    class Meta:
+        model = Outing
+        fields = ['start_time', 'end_time', 'group']

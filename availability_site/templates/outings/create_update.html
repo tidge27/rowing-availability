@@ -7,13 +7,13 @@
 
 <div class="mdl-grid demo-content" style="max-width:600px;">
 <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col" style="padding:16px;">
-    <h3>Create New Group</h3>
+    <h3>Create New Outing</h3>
     <form method="post" style="">
         {% csrf_token %}
-        <div style="display:inline-block; width:100%; padding:8px 0px;">
-            {% for field in group_form %}
+        <div style="display:inline-block; width:100%; padding:0px 0px;">
+            {% for field in outing_form %}
             {{ field.errors }}
-            <div class="mdc-text-field" data-mdc-auto-init="MDCTextField" style="width:100%;">
+            <div class="mdc-text-field" data-mdc-auto-init="MDCTextField" style="width:100%; margin: 8px 0px;">
                 <input class="mdc-text-field__input" type="text"
                        id="{{ field.id_for_label }}" name="{{ field.html_name }}"
                        value="{% if field.value != None %}{{ field.value }}{% endif %}">

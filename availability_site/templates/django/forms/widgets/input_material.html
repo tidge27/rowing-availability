@@ -1,0 +1,5 @@
+<div class="mdc-text-field {% include "django/forms/widgets/attrs_class_container.html" %}" style="{% include "django/forms/widgets/attrs_style_container.html" %}" data-mdc-auto-init="MDCTextField">
+    <input class="mdc-text-field__input" type="{{ widget.type }}" name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs_material.html" %}>
+    <label class="mdc-floating-label" for="{{ widget.attrs.id }}">{{ widget.attrs.label }}</label>
+</div>
+

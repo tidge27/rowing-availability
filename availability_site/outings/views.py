@@ -108,9 +108,9 @@ class CombinedAvailabilityView(TemplateView):
             day = datetime.datetime(today_now.year, today_now.month, today_now.day, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
         prev_day = datetime.datetime.strftime(day + relativedelta(days=1), "%d%m%Y")
-        prev_day_link = "?date={}".format(prev_day)
+        prev_day_link = "date={}".format(prev_day)
         next_day = datetime.datetime.strftime(day + relativedelta(days=1), "%d%m%Y")
-        next_day_link = "?date={}".format(next_day)
+        next_day_link = "date={}".format(next_day)
 
         import untangle
         lighting_down = day
@@ -221,9 +221,9 @@ class CombinedAvailabilityView(TemplateView):
         return HttpResponse(template.render(context, request))
 
 
-def create_outing(request):
-    if request.GET.get("id", None):
-        outing = Outing.objects.get(id=request.GET.get("id", None))
+def create_outing(request, pk=None):
+    if pk:
+        outing = Outing.objects.get(id=pk)
     else:
         outing = Outing()
 
@@ -236,7 +236,7 @@ def create_outing(request):
             if formset.is_valid():
                 formset.save()
                 print(formset.cleaned_data)
-                return HttpResponseRedirect(reverse('outings'))
+                return HttpResponseRedirect(created_outing.get_absolute_url())
 
 
             else:
@@ -257,14 +257,29 @@ def create_outing(request):
 
     else:
 
-        if request.GET.get("id", None):
-            outing = Outing.objects.get(id=request.GET.get("id", None))
+        if pk:
+            outing = Outing.objects.get(id=pk)
             outing_form = OutingModelForm(instance=outing)
+            formset = OutingMemberFormSet(instance=outing)
         else:
             outing = Outing()
-            outing_form = OutingModelForm()
 
-        formset = OutingMemberFormSet(instance=outing)
+            if request.GET.get("group", None):
+                outing_form = OutingModelForm(
+                    initial={"group": Group.objects.filter(name=request.GET.get("group", None)).first()})
+                formset = OutingMemberFormSet(instance=outing)
+                group_members = GroupMember.objects.filter(group__name=request.GET.get("group", None)).order_by('-seat')
+                for i, form in enumerate(formset):
+                    try:
+                        user = group_members.filter(seat=i+1).first().user
+                    except Exception as e:
+                        user=None
+                    form.initial = {"seat":i+1,"user":user}
+            else:
+                formset = OutingMemberFormSet(instance=outing)
+                outing_form = OutingModelForm()
+
+
 
         context = {
             'outing_form': outing_form,

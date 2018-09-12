@@ -37,11 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     # 'ucamwebauth',
     'users',
     'groups',
-    'outings'
+    'outings',
 ]
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 AUTH_USER_MODEL = 'users.MyUser'
 

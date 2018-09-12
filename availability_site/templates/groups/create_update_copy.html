@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+<!--materual web components-->
+<!--<link rel=”stylesheet” href=”https://unpkg.com/material-components-web/dist/material-components-web.min.css">-->
+
+<div class="mdl-grid demo-content" style="max-width:600px;">
+<div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col" style="padding:16px;     margin-top: -16px;">
+    <h3>Create New Group</h3>
+    <form method="post" style="">
+        {% csrf_token %}
+        <div style="display:inline-block; width:100%; padding:8px 0px;">
+            {% for field in group_form %}
+            {{ field.errors }}
+            <div class="mdc-text-field" data-mdc-auto-init="MDCTextField" style="width:100%;">
+                <input class="mdc-text-field__input" type="datetime"
+                       id="{{ field.id_for_label }}" name="{{ field.html_name }}"
+                       value="{% if field.value != None %}{{ field.value }}{% endif %}">
+                <label class="mdc-floating-label" for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+                <!--<span class="mdl-textfield__error">{{ form.seat.errors }}</span>-->
+            </div>
+
+            {% if field.help_text %}
+            {{ field.help_text|safe }}
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        {% for form in formset %}
+
+
+        <div style="display:inline-block; width:100%; padding:8px 0px;">
+            <!--{{ form.user }}-->
+            <div class="mdc-text-field" data-mdc-auto-init="MDCTextField" style="width:100px;">
+                <input class="mdc-text-field__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?"
+                       id="{{ form.seat.id_for_label }}" name="{{ form.seat.html_name }}"
+                       value="{% if form.seat.value != None %}{{ form.seat.value }}{% endif %}">
+                <label class="mdc-floating-label" for="{{ form.seat.id_for_label }}">{{ form.seat.label_tag }}</label>
+                <!--<span class="mdl-textfield__error">{{ form.seat.errors }}</span>-->
+            </div>
+            <!--{{ form.user }}-->
+            <div class="mdc-text-field mdc-select" data-mdc-auto-init="MDCSelect" style="width:calc(100% - 116px); margin-left:12px">
+                <select class="mdc-text-field__input mdc-select__native-control" type="text"
+                        id="{{ form.user.id_for_label }}" name="{{ form.user.html_name }}" aria-controls="{{ form.user.html_name }}-helper-text"
+         aria-describedby="{{ form.user.html_name }}-helper-text">
+                    {% for x,y in form.fields.user.choices %}
+                    <option value="{{ x }}" {% if form.user.value|stringformat:"s" == x|stringformat:"s" %} selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+                <label class="mdc-floating-label" for="{{ form.user.id_for_label }}">{{ form.user.label_tag }}</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            {{ form.user.errors }}
+
+                {% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+        </div>
+
+        {% if field.help_text %}
+        {{ field.help_text|safe }}
+        {% endif %}
+
+
+        {% endfor %}
+        {{ formset.management_form }}
+        <!--<input type="submit" value="Submit">-->
+        <button type="submit"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="margin-top: 8px;">
+            Submit
+        </button>
+    </form>
+</div>
+</div>
+
+
+{% endblock %}

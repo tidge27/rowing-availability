@@ -50,9 +50,6 @@ class MyUser(AbstractBaseUser):
     is_bow = models.BooleanField(default=True)
     is_stroke = models.BooleanField(default=True)
     is_cox = models.BooleanField(default=False)
-    # events = models.relationship("Event", backref="user", cascade="all, delete-orphan")
-    # personal_outings = models.relationship("OutingMember", backref="user")
-    # group_members = models.relationship("GroupMember", backref="user")
 
     objects = MyUserManager()
 

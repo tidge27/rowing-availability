@@ -3,6 +3,8 @@ from django import forms
 from outings.models import Event, Outing, OutingMember
 from users.models import MyUser
 from datetime import datetime
+from availability_site.custom_forms import MaterialSplitDateTimeWidget, MaterialSelect
+from groups.models import Group
 
 
 class SplitHalfHiddenDateTimeWidget(forms.SplitDateTimeWidget):
@@ -64,7 +66,21 @@ class OutingMemberFormSet(BaseGroupMemberFormSet):
 
 
 class OutingModelForm(ModelForm):
+    start_time = forms.SplitDateTimeField(widget=MaterialSplitDateTimeWidget(
+        time_attrs={"type": "time", "label":"Start Time", "container_style":"margin:8px 0px; width:calc(50% - 8px)"},
+        date_attrs={"type": "date", "label":"Start Date", "container_style":"margin:8px 0px; width:calc(50% - 8px); margin-right:16px;"}
+    ))
+    end_time = forms.SplitDateTimeField(widget=MaterialSplitDateTimeWidget(
+        time_attrs={"type": "time","label":"End Time", "container_style":"margin:8px 0px; width:calc(50% - 8px)"},
+        date_attrs={"type": "date","label":"End Date", "container_style":"margin:8px 0px; width:calc(50% - 8px); margin-right:16px;"}
+    ))
+    group = forms.ModelChoiceField(widget=MaterialSelect(attrs={"container_style":"margin:8px 0px; width:100%","label":"Group"}), queryset=Group.objects.all())
+
+
 
     class Meta:
         model = Outing
         fields = ['start_time', 'end_time', 'group']
+        labels = {
+            "group": "WOOP GROOP",
+        }

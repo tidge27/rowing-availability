@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block center %}
+{% load custom_templates %}
 
 <div class="mdl-grid demo-content">
     <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col">
@@ -11,12 +12,12 @@
             </h2>
         </div>
         <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-card--expand">
-            <a href="{{ prev_day_link }}">
+            <a href="{% query_string 'prev_day_link' ''">
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                     Previous
                 </button>
             </a>
-            <a href="{{ request.GET.urlencode }}{{ next_day_link }}">
+            <a href="{{ request.GET.urlencode }}">
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                         style="margin-left:10px;">Next
                 </button>
@@ -66,7 +67,7 @@
 
     <!--<form method="post" class="mdl-cell mdl-cell&#45;&#45;12-col mdl-grid" style="padding: 0px; width: 100%; margin: 0px;">{% csrf_token %}-->
     <!---->
-    <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"
+    <div id="left_column" class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone"
          style="display: flex; align-items: center; justify-content: center; padding:10px;">
         <!--<input type="submit" value="Submit">-->
         <div style=" width:100%;">
@@ -78,7 +79,7 @@
                 <div class="mdl-card__title mdl-card--expand">
 
                     <h4>
-                        <a href="#">
+                        <a href="#" onclick="updateform();">
                         <div style="color:#fff; font-weight:normal">
                             {{ time_block.start_time|time:"H:i" }} - {{ time_block.end_time|time:"H:i" }}
                         </div>
@@ -117,6 +118,16 @@
             {% endfor %}
         </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function updateform(){
+  $.ajax({url:"http://localhost:8000/outings/create/", success:function(result){
+    $("#left_column").after(result);
+    mdc.autoInit()
+  }});
+});
+    </script>
     <!--</div>-->
     <!--<button type="submit" class="mdl-button mdl-js-button mdl-button&#45;&#45;raised mdl-js-ripple-effect mdl-button&#45;&#45;accent">-->
     <!--Submit-->

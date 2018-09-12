@@ -113,14 +113,16 @@
           <a class="mdl-navigation__link" href="{{ page.link }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">{{ page.icon }}</i>{{ page.name }}</a>
           {% endfor %}
           <div class="mdl-layout-spacer"></div>
+            {% if user.is_staff %}
           {% for admin_page in admin_pages %}
           <a class="mdl-navigation__link" href="{{ admin_page.link }}"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">{{ admin_page.icon }}</i>{{ admin_page.name }}</a>
           {% endfor %}
+            {% endif %}
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-        <!--<div class="mdl-grid demo-content">-->
           <!--<div class="demo-charts mdl-color&#45;&#45;white mdl-shadow&#45;&#45;2dp mdl-cell mdl-cell&#45;&#45;12-col mdl-grid">-->
+          <!--<div class="mdl-grid demo-content">-->
             {% block center %}
             {% endblock %}
           <!--</div>-->

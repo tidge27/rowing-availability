@@ -17,14 +17,14 @@ def base_context(request):
             {
                 "name": "Outings",
                 "icon": "access_time",
-                "link": "/outings/outings"
+                "link": "/outings/"
             }
         ],
         "admin_pages": [
             {
                 "name": "Groups",
                 "icon": "group",
-                "link": "/groups/groups",
+                "link": "/groups/",
             },
         ],
         "support_email":"mailto:tidge27@gmail.com"

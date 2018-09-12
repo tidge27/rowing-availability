@@ -10,11 +10,11 @@ from django.urls import reverse
 class GroupListView(ListView):
     model = Group
     context_object_name = "group_list"
-    template_name = 'groups/manage_group.html'
+    template_name = 'groups/groups.html'
 
-def create_group(request):
-    if request.GET.get("id", None):
-        group = Group.objects.get(id=request.GET.get("id", None))
+def create_group(request, pk=None):
+    if pk:
+        group = Group.objects.get(id=pk)
     else:
         group = Group()
 
@@ -48,8 +48,8 @@ def create_group(request):
 
     else:
 
-        if request.GET.get("id", None):
-            group = Group.objects.get(id=request.GET.get("id", None))
+        if pk:
+            group = Group.objects.get(id=pk)
             group_form = GroupModelForm(instance=group)
         else:
             group = Group()
